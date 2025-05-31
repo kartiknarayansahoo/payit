@@ -1,0 +1,86 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                String               @id @default(uuid())
+  email             String               @unique
+  name              String?
+  number            String?              @unique
+  password          String
+  Balance           Balance[]
+  OnRampTransaction OnRampTransaction[]
+  sentTransfers     WalletTransactions[] @relation(name: "SentTransactions")
+  receivedTransfer  WalletTransactions[] @relation(name: "ReceivedTransactions")
+}
+
+model Merchant {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String?
+  auth_type AuthType
+}
+
+model Balance {
+  id     String @id @default(uuid())
+  userId String @unique
+  amount Int
+  locked Int
+  user   User   @relation(references: [id], fields: [userId])
+}
+
+model OnRampTransaction {
+  id        String          @id @default(uuid())
+  status    OnRampStatus
+  token     String          @unique
+  provider  String //mode of payment
+  amount    Int
+  startTime DateTime
+  userId    String
+  transType TransTypeStatus
+  user      User            @relation(references: [id], fields: [userId])
+}
+
+model WalletTransactions {
+  id         String                  @id @default(uuid())
+  status     WalletTransactionStatus
+  amount     Int
+  createdAt  DateTime
+  fromUserId String
+  fromUser   User                    @relation(name: "SentTransactions", references: [id], fields: [fromUserId])
+  toUserId   String
+  toUser     User                    @relation(name: "ReceivedTransactions", references: [id], fields: [toUserId])
+}
+
+enum AuthType {
+  Google
+  Github
+}
+
+enum OnRampStatus {
+  Pending
+  Success
+  Failure
+}
+
+enum WalletTransactionStatus {
+  Success
+  Failure
+}
+
+enum TransTypeStatus {
+  Deposit
+  Withdraw
+  Transfer
+}
