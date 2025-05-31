@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth"
 import { AUTH_CONFIG } from "../auth"
 import prisma from "@repo/db/client";
 import { TransTypeStatus } from "@prisma/client";
-import { getBalance } from "../../app/(dashboard)/wallet/page";
+import { getBalance } from "./getBalance";
 
 
 // this function will be called when the add money button is clicked

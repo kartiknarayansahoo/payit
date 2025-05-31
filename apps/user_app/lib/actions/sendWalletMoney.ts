@@ -1,9 +1,9 @@
 "use server"
 
 import prisma from "@repo/db/client";
-import { getBalance } from "../../app/(dashboard)/wallet/page";
 import { getServerSession } from "next-auth";
 import { AUTH_CONFIG } from "../auth";
+import { getBalance } from "./getBalance";
 
 export async function sendWalletMoney(amount: string, email: string) {
     const balance = await getBalance();
