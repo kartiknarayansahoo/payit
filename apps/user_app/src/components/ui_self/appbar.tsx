@@ -63,10 +63,11 @@ const HamburgerMenu = () => {
                     </DropdownMenuItem>
                     <DropdownMenuItem className="text-violet-700 font-semibold focus:bg-violet-200 focus:text-violet-700"><Button redirectPath="/wallet" text="Wallet"></Button>
                     </DropdownMenuItem>
-                    <DropdownMenuItem className="text-violet-700 font-semibold focus:bg-violet-200 focus:text-violet-700"><Button redirectPath="/transactions" text="Transactions"></Button>
-                    </DropdownMenuItem>
                     <DropdownMenuItem className="text-violet-700 font-semibold focus:bg-violet-200 focus:text-violet-700"><Button redirectPath="/transfer" text="Transfer"></Button>
                     </DropdownMenuItem>
+                    <DropdownMenuItem className="text-violet-700 font-semibold focus:bg-violet-200 focus:text-violet-700"><Button redirectPath="/transactions" text="Transactions"></Button>
+                    </DropdownMenuItem>
+
                 </DropdownMenuContent>
             </DropdownMenu>
         </div>

@@ -41,6 +41,8 @@ export const AUTH_CONFIG = {
                         data: {
                             email: credentials?.email || "",
                             password: hashpass || "",
+                            createdAt: new Date(),
+                            updatedAt: new Date(),
                             Balance: {
                                 create: {
                                     amount: 0,

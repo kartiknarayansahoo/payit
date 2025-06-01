@@ -50,7 +50,7 @@ export async function createOnRampTransactions(amount: string, bankName: string,
                     token: token,
                     provider: bankName,
                     amount: Number(amount) * -100,
-                    startTime: new Date(),
+                    createdAt: new Date(),
                     userId: userId,
                     transType: transType
                 }
@@ -75,7 +75,7 @@ export async function createOnRampTransactions(amount: string, bankName: string,
                 token: token,
                 provider: bankName,
                 amount: Number(amount) * 100,
-                startTime: new Date(),
+                createdAt: new Date(),
                 userId: userId,
                 transType: transType
             }

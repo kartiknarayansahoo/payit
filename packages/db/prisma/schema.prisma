@@ -19,6 +19,8 @@ model User {
   name              String?
   number            String?              @unique
   password          String
+  createdAt         DateTime
+  updatedAt         DateTime
   Balance           Balance[]
   OnRampTransaction OnRampTransaction[]
   sentTransfers     WalletTransactions[] @relation(name: "SentTransactions")
@@ -29,6 +31,7 @@ model Merchant {
   id        String   @id @default(uuid())
   email     String   @unique
   name      String?
+  createdAt DateTime
   auth_type AuthType
 }
 
@@ -46,7 +49,7 @@ model OnRampTransaction {
   token     String          @unique
   provider  String //mode of payment
   amount    Int
-  startTime DateTime
+  createdAt DateTime
   userId    String
   transType TransTypeStatus
   user      User            @relation(references: [id], fields: [userId])

@@ -1,7 +1,14 @@
+"use client"
 import { TransactionsComp } from "@/components/ui_self/transactionComponent";
-import { getOnRampTransactions } from "../../../lib/actions/getOnRampTransactions";
+import { useSession } from "next-auth/react";
+import { redirect, useRouter } from "next/navigation";
 
-export default async function () {
+export default function () {
+  const session = useSession();
+
+  if (session.status == "unauthenticated") {
+    redirect('/auth/signin');
+  }
 
   return (
     <>

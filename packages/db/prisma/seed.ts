@@ -10,23 +10,27 @@ async function main() {
       email: 'alice@gmail.com',
       password: await bcrypt.hash('alice', 10),
       name: 'alice',
+      createdAt: new Date(),
+      updatedAt: new Date(),
       Balance: {
         create: {
-            amount: 20000,
-            locked: 0
+          amount: 20000,
+          locked: 0
         }
       },
       OnRampTransaction: {
         create: {
-          startTime: new Date(),
           status: "Success",
-          amount: 20000,
           token: "token__1",
           provider: "HDFC Bank",
+          amount: 20000,
+          createdAt: new Date(),
+          transType: "Deposit"
         },
       },
     },
-  })
+  });
+  
   const bob = await prisma.user.upsert({
     where: { email: 'bob@gmail.com' },
     update: {},
@@ -34,23 +38,26 @@ async function main() {
       email: 'bob@gmail.com',
       password: await bcrypt.hash('bob', 10),
       name: 'bob',
+      createdAt: new Date(),
+      updatedAt: new Date(),
       Balance: {
         create: {
-            amount: 2000,
-            locked: 0
+          amount: 2000,
+          locked: 0
         }
       },
       OnRampTransaction: {
         create: {
-          startTime: new Date(),
           status: "Failure",
-          amount: 2000,
           token: "token__2",
-          provider: "HDFC Bank",
+          provider: "Axis Bank",
+          amount: 20000,
+          createdAt: new Date(),
+          transType: "Deposit"
         },
       },
     },
-  })
+  });
   console.log({ alice, bob })
 }
 

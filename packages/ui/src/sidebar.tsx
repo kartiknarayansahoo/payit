@@ -13,10 +13,10 @@ export const Sidebar = () => {
                     <Button redirectPath="/wallet" text="Wallet" svgIcon={<WalletIcon></WalletIcon>}></Button>
                 </div>
                 <div className="px-4 pt-2">
-                    <Button redirectPath="/transactions" text="Transactions" svgIcon={<TransactionIcon></TransactionIcon>}></Button>
+                    <Button redirectPath="/transfer" text="Transfer" svgIcon={<TransferIcon></TransferIcon>}></Button>
                 </div>
                 <div className="px-4 pt-2">
-                    <Button redirectPath="/transfer" text="Transfer" svgIcon={<TransferIcon></TransferIcon>}></Button>
+                    <Button redirectPath="/transactions" text="Transactions" svgIcon={<TransactionIcon></TransactionIcon>}></Button>
                 </div>
             </div>
         </motion.div>

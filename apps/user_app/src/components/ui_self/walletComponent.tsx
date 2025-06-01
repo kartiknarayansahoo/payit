@@ -6,8 +6,10 @@ import { TransactionsCard } from "./transactionCard";
 import { motion } from "motion/react";
 import { PageHeader } from "./pageHeader";
 import { InfoCard } from "./infocard";
+import { useQuery } from "@tanstack/react-query";
+import { getBalance } from "../../../lib/actions/getBalance";
 
-export const Wallet = ({ transactions, balance }) => {
+export const Wallet = () => {
     const [tab, setTab] = useState("deposit");
 
     return (
@@ -26,8 +28,8 @@ export const Wallet = ({ transactions, balance }) => {
                     {tab == "withdraw" && <WalletSubCard transType={"Withdraw"}></WalletSubCard>}
                 </div>
                 <div>
-                    <BalanceCard totalBal={`Rs ${balance.amount / 100}`} unlockedBal={"Rs 0"} totalLockedAmt={`Rs ${balance.locked / 100}`}></BalanceCard>
-                    <TransactionsCard title={"Recent Transactions"} transactions={transactions}></TransactionsCard>
+                    <BalanceCard></BalanceCard>
+                    <TransactionsCard title={"Recent Bank Transactions"}></TransactionsCard>
                 </div>
             </div>
         </motion.div>

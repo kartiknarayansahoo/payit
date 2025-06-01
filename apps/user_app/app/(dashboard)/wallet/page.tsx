@@ -1,16 +1,20 @@
+"use client"
 import { Wallet } from "@/components/ui_self/walletComponent";
-import { getOnRampTransactions } from "../../../lib/actions/getOnRampTransactions";
-import { getBalance } from "../../../lib/actions/getBalance";
+import { useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
 
-export default async function () {
-  const transactions = await getOnRampTransactions();
-  const balance = await getBalance();
-  // console.log(`transactions: ${transactions}`);
+export default function () {
+  const session = useSession();
+
+  if (session.status == "unauthenticated") {
+    redirect('/auth/signin');
+  }
+
 
   return (
     <>
       {/* {JSON.stringify(session.data)}; */}
-      <Wallet transactions={transactions} balance={balance}></Wallet>
+      <Wallet></Wallet>
     </>
   );
 }

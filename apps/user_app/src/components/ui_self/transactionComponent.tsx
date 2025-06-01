@@ -3,34 +3,26 @@ import { motion } from "motion/react";
 import { TransactionsSubCard } from "@repo/ui/card"
 import { PageHeader } from "./pageHeader";
 import { useState } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { getOnRampTransactions } from "../../../lib/actions/getOnRampTransactions";
+import { SkeletonTransCard } from "./skeleton";
+import { ErrorCard } from "./errorCard";
+import { getWalletTransactions } from "../../../lib/actions/getWalletTransactions";
+import { useSession } from "next-auth/react";
 
 export const TransactionsComp = () => {
     const [tab, setTab] = useState("bankTransactions");
 
-    const { isPending, isError, data, error } = useQuery({
+    const bankTransactions = useQuery({
         queryKey: ["bankTransactions"],
         queryFn: getOnRampTransactions
     })
 
+    const walletTransactions = useQuery({
+        queryKey: ["walletTransactions"],
+        queryFn: getWalletTransactions
+    })
 
-    if (isPending) {
-        return (
-            <div>
-                Pending data;
-            </div>
-        )
-    }
-
-    if (isError) {
-        return (
-            <div>
-                Error encountered
-                {error.message};
-            </div>
-        )
-    }
 
     return (
         <motion.div className="flex-auto h-full p-2" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, ease: "easeIn" }}>
@@ -39,14 +31,48 @@ export const TransactionsComp = () => {
                 <button onClick={() => { setTab("bankTransactions") }} className={` font-semibold ${tab == "bankTransactions" ? "bg-violet-500 text-white hover:bg-violet-600" : "bg-white text-violet-950 hover:text-violet-700"} rounded-xl px-3 py-2 mx-2 shadow-md`}>Bank Transactions</button>
                 <button onClick={() => { setTab("walletTransactions") }} className={` font-semibold ${tab == "walletTransactions" ? "bg-violet-500 text-white hover:bg-violet-600" : "bg-white text-violet-950 hover:text-violet-700"} rounded-xl px-3 py-2 mx-2 shadow-md`}>Wallet Transactions</button>
             </div>
-            <div className="bg-white rounded-2xl py-4 px-2 shadow-sm">
-                {data.length == 0 ? <div className="mx-2 my-2 p-4 bg-violet-100 text-violet-700 font-semibold rounded-xl">No transactions...</div> :
-                    data.map(t =>
-                        <TransactionsSubCard onRampStatus={t.status} key={t.id} text={`${t.transType}`} amount={`Rs ${t.amount / 100}`} date={t.startTime.toUTCString()}>
-                        </TransactionsSubCard>
-                    )
-                }
+            <div className="bg-white rounded-2xl mx-2 py-4 px-2 shadow-sm">
+                {tab == "bankTransactions" && <TransactionsDisplayComp type="bank" transactions={bankTransactions}></TransactionsDisplayComp>}
+                {tab == "walletTransactions" && <TransactionsDisplayComp type="wallet" transactions={walletTransactions}></TransactionsDisplayComp>}
             </div>
         </motion.div>
     )
+}
+
+const TransactionsDisplayComp = ({ type, transactions }) => {
+    const session = useSession();
+    const user = session.data?.user;
+    console.log(user);
+
+    if (type == "bank") {
+        return (
+            <>
+                {
+                    transactions.isPending ? <><SkeletonTransCard></SkeletonTransCard> <SkeletonTransCard></SkeletonTransCard> <SkeletonTransCard></SkeletonTransCard></> :
+                        transactions.isError ? <ErrorCard errorMsg={transactions.error.message}></ErrorCard> :
+                            transactions.data.length == 0 ? <div className="mx-2 my-2 p-4 bg-violet-100 text-violet-700 font-semibold rounded-xl">No transactions...</div> :
+                                transactions.data.map(t =>
+                                    <TransactionsSubCard onRampStatus={t.status} key={t.id} text={t.transType} amount={`Rs ${t.amount / 100}`} date={t.createdAt.toUTCString().split(' ').slice(0, 4).join(' ')} >
+                                    </TransactionsSubCard >
+                                )
+                }
+            </>)
+    }
+
+    else if (type == "wallet") {
+        return (
+            <>
+                {
+                    transactions.isPending ? <><SkeletonTransCard></SkeletonTransCard> <SkeletonTransCard></SkeletonTransCard> <SkeletonTransCard></SkeletonTransCard></> :
+                        transactions.isError ? <ErrorCard errorMsg={transactions.error.message}></ErrorCard> :
+                            transactions.data.length == 0 ? <div className="mx-2 my-2 p-4 bg-violet-100 text-violet-700 font-semibold rounded-xl">No transactions...</div> :
+                                transactions.data.map(t =>
+                                    <TransactionsSubCard onRampStatus={t.status} key={t.id} text={t.fromUserId == user.id ? "Sent" : "Received"} amount={t.fromUserId == user.id ? `- Rs ${t.amount / 100}` : `Rs ${t.amount / 100}`} date={t.createdAt.toUTCString().split(' ').slice(0, 4).join(' ')}>
+                                    </TransactionsSubCard>
+                                )
+                }
+            </>
+        )
+    }
+
 }

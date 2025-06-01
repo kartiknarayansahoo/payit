@@ -3,6 +3,8 @@ import { motion } from "motion/react";
 import { TransferCard } from "./transferCard";
 import { PageHeader } from "./pageHeader";
 import { InfoCard } from "./infocard";
+import { BalanceCard } from "./balanceCard";
+import { WalletTransactionsCard } from "./transactionCard";
 
 export const Transfer = () => {
 
@@ -12,8 +14,16 @@ export const Transfer = () => {
             transition={{ duration: 0.3, ease: "easeIn" }}>
             <PageHeader title="Transfer"></PageHeader>
             <InfoCard title={"Send money to other users using your wallet balance"} tab={""}></InfoCard>
-            <div className="flex items-center justify-center m-4">
-                <TransferCard></TransferCard>
+            {/* <div className="flex items-center justify-center m-4"> */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 rounded-2xl py-2">
+                <div>
+                    <TransferCard></TransferCard>
+                </div>
+                <div>
+                    <BalanceCard></BalanceCard>
+                    <WalletTransactionsCard title="Recent Wallet Transactions"></WalletTransactionsCard>
+                </div>
+
             </div>
         </motion.div>
     )

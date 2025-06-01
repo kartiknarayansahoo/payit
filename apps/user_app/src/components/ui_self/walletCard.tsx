@@ -12,6 +12,7 @@ import { createOnRampTransactions } from "../../../lib/actions/createOnRampTrans
 import { TransTypeStatus } from "@prisma/client";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
 
 
 const bank_config_list = [
@@ -30,6 +31,8 @@ export const WalletSubCard = ({ transType }: { transType: TransTypeStatus }) => 
   const [bankName, setBankName] = useState("");
   const [redirectUrl, setRedirectUrl] = useState("");
   const router = useRouter();
+  const queryClient = useQueryClient();
+
 
   // debouncing and two decimal amount implemented
   let tid = null;
@@ -50,7 +53,7 @@ export const WalletSubCard = ({ transType }: { transType: TransTypeStatus }) => 
   }
 
   return (
-    <div className="bg-white rounded-2xl p-4 m-2 shadow-sm">
+    <div className="bg-white rounded-2xl p-4 mt-2 mx-2 shadow-sm">
       <div className="flex flex-wrap border-b-2 py-2 text-xl font-semibold">
         <motion.div className="pr-2" initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
@@ -92,6 +95,9 @@ export const WalletSubCard = ({ transType }: { transType: TransTypeStatus }) => 
           const res = await createOnRampTransactions(amount, bankName, transType);
           if (res.success) {
             toast.success(res.msg);
+            queryClient.invalidateQueries({ queryKey: ["bankTransactions"] });
+            queryClient.invalidateQueries({ queryKey: ["balance"] });
+            router.refresh();
           }
           else {
             toast.error(res.msg);
@@ -100,10 +106,6 @@ export const WalletSubCard = ({ transType }: { transType: TransTypeStatus }) => 
           // window.location.href = redirectUrl;
 
           // transType == "Deposit" && res.success ? window.open(redirectUrl) : null; // opens new window with bank url
-          if (res.success) {
-            router.refresh();
-          }
-
         }}>{transType} Money</button>
       </div>
     </div>
