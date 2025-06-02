@@ -13,6 +13,8 @@ import { TransTypeStatus } from "@prisma/client";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
+import { Button } from "@/components/ui/button"
+
 
 
 const bank_config_list = [
@@ -34,23 +36,34 @@ export const WalletSubCard = ({ transType }: { transType: TransTypeStatus }) => 
   const queryClient = useQueryClient();
 
 
-  // debouncing and two decimal amount implemented
   let tid = null;
   function updateAmount(e) {
-    console.log(tid);
-    if (tid) clearTimeout(tid);
-    tid = setTimeout(() => {
-      const val = e.target.value;
-      console.log(typeof (val));
-      console.log(val);
-      let parseVal = val;
-      if (val) {
-        parseVal = parseFloat(val).toFixed(2);
-      }
-      setAmount(parseVal);
-      e.target.value = parseVal.toString();
-    }, 1500);
+    const val = e.target.value;
+    // regex to limit to 2 decimal places
+    if (/^\d*\.?\d{0,2}$/.test(val)) {
+      setAmount(val);
+    }
   }
+
+  // debouncing and two decimal amount implemented
+  // let tid = null;
+  // function updateAmount(e) {
+  //   console.log(tid);
+  //   if (tid) clearTimeout(tid);
+  //   tid = setTimeout(() => {
+  //     const val = e.target.value;
+  //     if (/^\d*\.?\d{0,2}$/.test(val)) {
+  //       setAmount(val);
+  //     }
+  //     // console.log(typeof (val));
+  //     // console.log(val);
+  //     // let parseVal = val;
+  //     // if (val) {
+  //     //   parseVal = parseFloat(val).toFixed(2);
+  //     // }
+  //     // setAmount(parseVal);
+  //   }, 1500);
+  // }
 
   return (
     <div className="bg-white rounded-2xl p-4 mt-2 mx-2 shadow-sm">
@@ -79,7 +92,7 @@ export const WalletSubCard = ({ transType }: { transType: TransTypeStatus }) => 
       </div>
       <div>
         <div className="pt-2 font-medium">Amount</div>
-        <input type="number" step={"0.01"} onChange={e => updateAmount(e)} className="bg-stone-100 w-full p-2 my-2 outline outline-stone-200 rounded-md" placeholder="0.00" />
+        <input type="number" step={"0.01"} value={amount} onChange={e => updateAmount(e)} className="bg-stone-100 w-full p-2 my-2 outline outline-stone-200 rounded-md" placeholder="0.00" />
       </div>
       <div>
         <div className="pt-2 font-medium">Bank</div>
@@ -91,7 +104,7 @@ export const WalletSubCard = ({ transType }: { transType: TransTypeStatus }) => 
         </div>
       </div>
       <div className="justify-self-center mt-6">
-        <button className="bg-violet-500 hover:bg-violet-600 px-4 py-2 rounded-lg text-white font-medium shadow-sm" onClick={async () => {
+        <Button size={"lg"} disabled={!amount || !bankName} className="bg-violet-500 hover:bg-violet-600 m-2 rounded-lg text-white text-md font-medium shadow-sm" onClick={async () => {
           const res = await createOnRampTransactions(amount, bankName, transType);
           if (res.success) {
             toast.success(res.msg);
@@ -106,7 +119,7 @@ export const WalletSubCard = ({ transType }: { transType: TransTypeStatus }) => 
           // window.location.href = redirectUrl;
 
           // transType == "Deposit" && res.success ? window.open(redirectUrl) : null; // opens new window with bank url
-        }}>{transType} Money</button>
+        }}>{transType} Money</Button>
       </div>
     </div>
   )

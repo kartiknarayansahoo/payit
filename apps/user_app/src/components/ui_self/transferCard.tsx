@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import { sendWalletMoney } from "../../../lib/actions/sendWalletMoney";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button"
 
 export const TransferCard = () => {
     const [amount, setAmount] = useState("");
@@ -14,27 +15,15 @@ export const TransferCard = () => {
     // debouncing
     let tid = null;
     function updateAmount(e) {
-        if (tid) clearTimeout(tid);
-        tid = setTimeout(() => {
-            const val = e.target.value;
-            console.log(typeof (val));
-            console.log(val);
-            let parseVal = val;
-            if (val) {
-                parseVal = parseFloat(val).toFixed(2);
-            }
-            setAmount(parseVal);
-            e.target.value = parseVal.toString();
-        }, 1500);
+        const val = e.target.value;
+        if (/^\d*\.?\d{0,2}$/.test(val)) {
+            setAmount(val);
+        }
     }
 
-    let tid2 = null;
     function updateEmail(e) {
-        if (tid2) clearTimeout(tid2);
-        tid2 = setTimeout(() => {
-            const val = e.target.value;
-            setEmail(val);
-        }, 1500);
+        const val = e.target.value;
+        setEmail(val);
     }
 
 
@@ -62,16 +51,16 @@ export const TransferCard = () => {
                         <div className="pt-2 font-medium">
                             Email
                         </div>
-                        <input onChange={e => updateEmail(e)} required className="bg-stone-100 w-full p-2 my-2 outline outline-stone-200 rounded-md" type="email" />
+                        <input value={email} onChange={e => updateEmail(e)} required className="bg-stone-100 w-full p-2 my-2 outline outline-stone-200 rounded-md" type="email" />
                     </div>
                     <div className="">
                         <div className="pt-2 font-medium">
                             Amount
                         </div>
-                        <input onChange={e => updateAmount(e)} required className="bg-stone-100 w-full p-2 my-2 outline outline-stone-200 rounded-md" type="number" step={"0.01"} placeholder="0.00" />
+                        <input value={amount} onChange={e => updateAmount(e)} required className="bg-stone-100 w-full p-2 my-2 outline outline-stone-200 rounded-md" type="number" step={"0.01"} placeholder="0.00" />
                     </div>
                     <div className="pt-4 self-center">
-                        <button type="submit" className="bg-violet-200 hover:bg-violet-300 py-2 px-4 rounded-lg text-violet-700 font-medium">Send Money</button>
+                        <Button size={"lg"} disabled={!amount || !email} type="submit" className="bg-violet-200 hover:bg-violet-300 rounded-lg text-violet-700 text-md font-medium">Send Money</Button>
                     </div>
                 </div>
             </form>
