@@ -27,9 +27,13 @@ export const Wallet = () => {
                     {tab == "deposit" && <WalletSubCard transType={"Deposit"}></WalletSubCard>}
                     {tab == "withdraw" && <WalletSubCard transType={"Withdraw"}></WalletSubCard>}
                 </div>
-                <div>
-                    <BalanceCard></BalanceCard>
-                    <TransactionsCard title={"Recent Bank Transactions"}></TransactionsCard>
+                <div className="my-2 mx-2">
+                    <div className="mb-2">
+                        <BalanceCard></BalanceCard>
+                    </div>
+                    <div>
+                        <TransactionsCard title={"Recent Bank Transactions"}></TransactionsCard>
+                    </div>
                 </div>
             </div>
         </motion.div>

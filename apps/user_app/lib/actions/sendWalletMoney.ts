@@ -54,40 +54,55 @@ export async function sendWalletMoney(amount: string, email: string) {
     }
     // send money to given user and deduct balance from your end
     // also add transactions for both the users
-    const res = await prisma.$transaction([
-        // deduct from fromUser
-        prisma.balance.update({
-            where: {
-                userId: fromUserId
-            },
-            data: {
-                amount: {
-                    increment: Number(amount) * -100
+    try {
+        await prisma.$transaction(async (tx) => {
+            // locking balance row for fromUser
+            await tx.$queryRaw`SELECT * FROM "Balance" WHERE "userId"=${fromUserId} FOR UPDATE`;
+            const fromBalance = await tx.balance.findUnique({ where: { userId: fromUserId } });
+
+            if (!fromBalance || fromBalance.amount / 100 < Number(amount))
+                throw new Error("Insufficient Balance");
+
+            await tx.balance.update({
+                where: {
+                    userId: fromUserId
+                },
+                data: {
+                    amount: {
+                        increment: Number(amount) * -100
+                    }
                 }
-            }
-        }),
-        // increment at toUser
-        prisma.balance.update({
-            where: {
-                userId: toUser.id
-            },
-            data: {
-                amount: {
-                    increment: Number(amount) * 100
+            });
+            // increment at toUser
+            await tx.balance.update({
+                where: {
+                    userId: toUser.id
+                },
+                data: {
+                    amount: {
+                        increment: Number(amount) * 100
+                    }
                 }
-            }
-        }),
-        // add transaction details to database
-        prisma.walletTransactions.create({
-            data: {
-                status: "Success",
-                amount: Number(amount) * 100,
-                createdAt: new Date(),
-                fromUserId: fromUserId,
-                toUserId: toUser.id,
-            }
+            });
+            // add transaction details to database
+            await tx.walletTransactions.create({
+                data: {
+                    status: "Success",
+                    amount: Number(amount) * 100,
+                    createdAt: new Date(),
+                    fromUserId: fromUserId,
+                    toUserId: toUser.id,
+                }
+            });
         })
-    ]);
+    }
+    catch (e) {
+        return {
+            msg: e,
+            success: false
+        }
+    }
+
 
     return {
         msg: "Amount sent successfully!",

@@ -1,7 +1,7 @@
 "use client"
 import { TransactionsSubCard } from "@repo/ui/card"
 import { getOnRampTransactions } from "../../../lib/actions/getOnRampTransactions"
-import { useQuery, useQueryClient } from "@tanstack/react-query"
+import { useQuery } from "@tanstack/react-query"
 import { SkeletonTransCard } from "./skeleton"
 import { ErrorCard } from "./errorCard"
 import { getWalletTransactions } from "../../../lib/actions/getWalletTransactions"
@@ -16,7 +16,7 @@ export const TransactionsCard = ({ title }: { title: string }) => {
 
     // console.log(transactions);
     return (
-        <div className="bg-white rounded-2xl py-4 m-2 shadow-sm">
+        <div className="bg-white rounded-2xl py-4 shadow-sm">
             <div className="border-b-2 py-2 mx-4 text-xl font-semibold">
                 {title}
             </div>
@@ -49,7 +49,7 @@ export const WalletTransactionsCard = ({ title }: { title: string }) => {
 
     // console.log(transactions);
     return (
-        <div className="bg-white rounded-2xl py-4 m-2 shadow-sm">
+        <div className="bg-white rounded-2xl py-4 shadow-sm">
             <div className="border-b-2 py-2 mx-4 text-xl font-semibold">
                 {title}
             </div>

@@ -19,9 +19,13 @@ export const Transfer = () => {
                 <div>
                     <TransferCard></TransferCard>
                 </div>
-                <div>
-                    <BalanceCard></BalanceCard>
-                    <WalletTransactionsCard title="Recent Wallet Transactions"></WalletTransactionsCard>
+                <div className="my-2 mx-2">
+                    <div className="mb-2">
+                        <BalanceCard></BalanceCard>
+                    </div>
+                    <div>
+                        <WalletTransactionsCard title="Recent Wallet Transactions"></WalletTransactionsCard>
+                    </div>
                 </div>
 
             </div>

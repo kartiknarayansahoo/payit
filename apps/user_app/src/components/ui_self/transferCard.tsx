@@ -43,7 +43,7 @@ export const TransferCard = () => {
                     toast.error(res.msg);
                 }
             }}>
-                <div className="flex flex-col flex-auto bg-white p-4 rounded-xl shadow-sm m-2">
+                <div className="flex flex-col flex-auto bg-white p-4 rounded-xl shadow-sm mx-2 mt-2">
                     <div className="border-b-2 text-xl py-2 font-semibold">
                         Send
                     </div>

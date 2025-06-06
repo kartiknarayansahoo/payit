@@ -12,7 +12,7 @@ export const BalanceCard = () => {
 
 
   return (
-    <div className="bg-white rounded-2xl p-4 m-2 shadow-sm">
+    <div className="bg-white rounded-2xl p-4 shadow-sm">
       <div className="border-b-2 py-2 text-xl font-semibold">
         Balance
       </div>
