@@ -1,5 +1,5 @@
 "use client"
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import toast from "react-hot-toast";
 import { sendWalletMoney } from "../../../lib/actions/sendWalletMoney";
 import { useQueryClient } from "@tanstack/react-query";
@@ -14,14 +14,14 @@ export const TransferCard = () => {
 
     // debouncing
     let tid = null;
-    function updateAmount(e) {
+    function updateAmount(e: ChangeEvent<HTMLInputElement>) {
         const val = e.target.value;
         if (/^\d*\.?\d{0,2}$/.test(val)) {
             setAmount(val);
         }
     }
 
-    function updateEmail(e) {
+    function updateEmail(e: ChangeEvent<HTMLInputElement>) {
         const val = e.target.value;
         setEmail(val);
     }

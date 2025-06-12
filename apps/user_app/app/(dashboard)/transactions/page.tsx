@@ -1,9 +1,9 @@
 "use client"
 import { TransactionsComp } from "@/components/ui_self/transactionComponent";
 import { useSession } from "next-auth/react";
-import { redirect, useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 
-export default function () {
+export default function Transactions() {
   const session = useSession();
 
   if (session.status == "unauthenticated") {

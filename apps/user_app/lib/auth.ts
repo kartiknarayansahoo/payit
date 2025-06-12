@@ -14,7 +14,10 @@ export const AUTH_CONFIG = {
                 password: { label: "Password", type: "password" }
             },
             async authorize(credentials, req) {
-
+                if (credentials == undefined) {
+                    console.log("Undefined credentials");
+                    return null;
+                }
                 const hashpass = await bcrypt.hash(credentials?.password, saltRounds)
                 const existingUser = await db.user.findFirst({
                     where: { email: credentials?.email }

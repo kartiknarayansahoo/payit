@@ -7,7 +7,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { motion } from "motion/react";
-import { Dispatch, SetStateAction, useState } from "react";
+import { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
 import { createOnRampTransactions } from "../../../lib/actions/createOnRampTransactions";
 import { TransTypeStatus } from "@prisma/client";
 import toast from "react-hot-toast";
@@ -37,7 +37,7 @@ export const WalletSubCard = ({ transType }: { transType: TransTypeStatus }) => 
 
 
   let tid = null;
-  function updateAmount(e) {
+  function updateAmount(e: ChangeEvent<HTMLInputElement>) {
     const val = e.target.value;
     // regex to limit to 2 decimal places
     if (/^\d*\.?\d{0,2}$/.test(val)) {

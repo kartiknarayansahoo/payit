@@ -97,8 +97,9 @@ export async function sendWalletMoney(amount: string, email: string) {
         })
     }
     catch (e) {
+        console.log(e);
         return {
-            msg: e,
+            msg: "Error in sending money",
             success: false
         }
     }

@@ -1,0 +1,19 @@
+FROM node:20.17.0-alpine3.20
+
+WORKDIR /usr/src/app
+
+COPY package.json package-lock.json turbo.json tsconfig.json ./
+
+COPY apps ./apps
+COPY packages ./packages
+
+# install dependencies
+RUN npm install
+
+# generate prisma client
+RUN npm run db:generate
+
+# build the app
+RUN npm run build
+
+CMD [ "npm", "run", "start-user-app" ]

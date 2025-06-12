@@ -7,7 +7,13 @@ import { redirect } from "next/navigation";
 export const BalanceCard = () => {
   const { isPending, isError, data, error } = useQuery({
     queryKey: ["balance"],
-    queryFn: getBalance
+    queryFn: getBalance,
+    initialData: {
+      id: "",
+      userId: "",
+      amount: 0,
+      locked: 0
+    }
   });
 
 
@@ -20,14 +26,16 @@ export const BalanceCard = () => {
         <div className="">Total Balance</div>
         {isPending ? <div className="animate-pulse bg-violet-300 w-1/5 p-2 rounded-full"></div> :
           isError ? <div className="text-red-500">Error: {error?.message}</div> :
-            <div>Rs {data.amount / 100}</div>
+            data != null && data != undefined ?
+              <div>Rs {data.amount / 100}</div> : <div>Data is undefined</div>
         }
       </div>
       <div className="flex pt-2 justify-between items-center font-semibold">
         <div className="">Total Locked Amount</div>
         {isPending ? <div className="animate-pulse bg-violet-300 w-1/5 p-2 rounded-full"></div> :
           isError ? <div className="text-red-500">Error: {error?.message}</div> :
-            <div>Rs {data?.locked / 100}</div>
+            data != null && data != undefined ?
+              <div>Rs {data.locked / 100}</div> : <div>Data is undefined</div>
         }
       </div>
     </div>
@@ -48,7 +56,8 @@ export const LargeBalanceCard = () => {
         <div className="p-2 text-xl font-medium text-violet-700">Wallet Balance</div>
         <div className="p-2 text-4xl font-bold text-violet-500">{isPending ? <div className="animate-pulse bg-violet-300 w-2/5 md:w-1/5 px-6 py-4 rounded-full"></div> :
           isError ? <div className="text-red-500">Error: {error?.message}</div> :
-            <div>Rs {data.amount / 100}</div>
+            data != null && data != undefined ?
+              <div>Rs {data.amount / 100}</div> : <div>Data is undefined</div>
         }</div>
       </div>
       {/* buttons */}

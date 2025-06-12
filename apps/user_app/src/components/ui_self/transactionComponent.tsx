@@ -32,16 +32,21 @@ export const TransactionsComp = () => {
                 <button onClick={() => { setTab("walletTransactions") }} className={` font-semibold ${tab == "walletTransactions" ? "bg-violet-500 text-white hover:bg-violet-600" : "bg-white text-violet-950 hover:text-violet-700"} rounded-xl px-3 py-2 mx-2 shadow-md`}>Wallet Transactions</button>
             </div>
             <div className="bg-white rounded-2xl mx-2 py-4 px-2 shadow-sm">
-                {tab == "bankTransactions" && <TransactionsDisplayComp type="bank" transactions={bankTransactions}></TransactionsDisplayComp>}
-                {tab == "walletTransactions" && <TransactionsDisplayComp type="wallet" transactions={walletTransactions}></TransactionsDisplayComp>}
+                {tab == "bankTransactions" && <TransactionsDisplayComp type={TransType.bank} transactions={bankTransactions}></TransactionsDisplayComp>}
+                {tab == "walletTransactions" && <TransactionsDisplayComp type={TransType.wallet} transactions={walletTransactions}></TransactionsDisplayComp>}
             </div>
         </motion.div>
     )
 }
 
-const TransactionsDisplayComp = ({ type, transactions }) => {
+enum TransType {
+    bank = "bank",
+    wallet = "wallet"
+}
+
+const TransactionsDisplayComp = ({ type, transactions }: { type: TransType, transactions: any }) => {
     const session = useSession();
-    const user = session.data?.user;
+    const user: any = session.data?.user;
     console.log(user);
 
     if (type == "bank") {
@@ -51,7 +56,7 @@ const TransactionsDisplayComp = ({ type, transactions }) => {
                     transactions.isPending ? <><SkeletonTransCard></SkeletonTransCard> <SkeletonTransCard></SkeletonTransCard> <SkeletonTransCard></SkeletonTransCard></> :
                         transactions.isError ? <ErrorCard errorMsg={transactions.error.message}></ErrorCard> :
                             transactions.data.length == 0 ? <div className="mx-2 my-2 p-4 bg-violet-100 text-violet-700 font-semibold rounded-xl">No transactions...</div> :
-                                transactions.data.map(t =>
+                                transactions.data.map((t: any) =>
                                     <TransactionsSubCard onRampStatus={t.status} key={t.id} text={t.transType} amount={`Rs ${t.amount / 100}`} date={t.createdAt.toUTCString().split(' ').slice(0, 4).join(' ')} >
                                     </TransactionsSubCard >
                                 )
@@ -66,7 +71,7 @@ const TransactionsDisplayComp = ({ type, transactions }) => {
                     transactions.isPending ? <><SkeletonTransCard></SkeletonTransCard> <SkeletonTransCard></SkeletonTransCard> <SkeletonTransCard></SkeletonTransCard></> :
                         transactions.isError ? <ErrorCard errorMsg={transactions.error.message}></ErrorCard> :
                             transactions.data.length == 0 ? <div className="mx-2 my-2 p-4 bg-violet-100 text-violet-700 font-semibold rounded-xl">No transactions...</div> :
-                                transactions.data.map(t =>
+                                transactions.data.map((t: any) =>
                                     <TransactionsSubCard onRampStatus={t.status} key={t.id} text={t.fromUserId == user.id ? "Sent" : "Received"} amount={t.fromUserId == user.id ? `- Rs ${t.amount / 100}` : `Rs ${t.amount / 100}`} date={t.createdAt.toUTCString().split(' ').slice(0, 4).join(' ')}>
                                     </TransactionsSubCard>
                                 )

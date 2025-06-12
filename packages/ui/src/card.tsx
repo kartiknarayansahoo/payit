@@ -1,4 +1,5 @@
 import { type JSX } from "react";
+import { OnRampStatus } from "@prisma/client";
 
 export function Card({
   className,
@@ -27,7 +28,7 @@ export function Card({
 }
 
 
-export const TransactionsSubCard = ({ onRampStatus, text, amount, date }) => {
+export const TransactionsSubCard = ({ onRampStatus, text, amount, date }: { onRampStatus: OnRampStatus, text: string, amount: string, date: string }) => {
   return (
     <div className="flex justify-between items-center p-2">
       <div className="flex items-center">

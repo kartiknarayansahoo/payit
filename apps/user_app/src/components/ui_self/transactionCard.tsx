@@ -23,12 +23,13 @@ export const TransactionsCard = ({ title }: { title: string }) => {
             {/* {JSON.stringify(transactions)} */}
             {isPending ? <><SkeletonTransCard></SkeletonTransCard> <SkeletonTransCard></SkeletonTransCard></> :
                 isError ? <ErrorCard errorMsg={error.message}></ErrorCard> :
-                    data.length == 0 ?
-                        <div className="mx-4 my-2 p-4 font-semibold rounded-xl bg-violet-100 text-violet-700">No transactions...</div> :
-                        data.map(t =>
-                            <TransactionsSubCard onRampStatus={t.status} key={t.id} text={`${t.transType} INR`} amount={`Rs ${t.amount / 100}`} date={t.createdAt.toUTCString().split(' ').slice(0, 4).join(' ')}>
-                            </TransactionsSubCard>
-                        )
+                    data != null && data != undefined ?
+                        data.length == 0 ?
+                            <div className="mx-4 my-2 p-4 font-semibold rounded-xl bg-violet-100 text-violet-700">No transactions...</div> :
+                            data.map(t =>
+                                <TransactionsSubCard onRampStatus={t.status} key={t.id} text={`${t.transType} INR`} amount={`Rs ${t.amount / 100}`} date={t.createdAt.toUTCString().split(' ').slice(0, 4).join(' ')}>
+                                </TransactionsSubCard>
+                            ) : <div>Data is undefined</div>
             }
 
             {/* <TransactionsSubCard text={"Withdrew INR"} amount="Rs 500" date="15th July, 2025"></TransactionsSubCard>
@@ -40,7 +41,7 @@ export const TransactionsCard = ({ title }: { title: string }) => {
 
 export const WalletTransactionsCard = ({ title }: { title: string }) => {
     const session = useSession();
-    const user = session.data?.user;
+    const user: any = session.data?.user;
     const { isPending, isError, data, error } = useQuery({
         queryKey: ["walletTransactions"],
         queryFn: getWalletTransactions
@@ -56,17 +57,18 @@ export const WalletTransactionsCard = ({ title }: { title: string }) => {
             {/* {JSON.stringify(transactions)} */}
             {isPending ? <><SkeletonTransCard></SkeletonTransCard> <SkeletonTransCard></SkeletonTransCard></> :
                 isError ? <ErrorCard errorMsg={error.message}></ErrorCard> :
-                    data.length == 0 ?
-                        <div className="mx-4 my-2 p-4 font-semibold rounded-xl bg-violet-100 text-violet-700">No transactions...</div> :
-                        data.map(t =>
-                            <TransactionsSubCard onRampStatus={t.status} key={t.id} text={t.fromUserId == user.id ? "Sent" : "Received"} amount={t.fromUserId == user.id ? `- Rs ${t.amount / 100}` : `Rs ${t.amount / 100}`} date={t.createdAt.toUTCString().split(' ').slice(0, 4).join(' ')}>
-                            </TransactionsSubCard>
-                        )
+                    data != null && data != undefined ?
+                        data.length == 0 ?
+                            <div className="mx-4 my-2 p-4 font-semibold rounded-xl bg-violet-100 text-violet-700">No transactions...</div> :
+                            data.map(t =>
+                                <TransactionsSubCard onRampStatus={t.status} key={t.id} text={t.fromUserId == user.id ? "Sent" : "Received"} amount={t.fromUserId == user.id ? `- Rs ${t.amount / 100}` : `Rs ${t.amount / 100}`} date={t.createdAt.toUTCString().split(' ').slice(0, 4).join(' ')}>
+                                </TransactionsSubCard>
+                            ) : <div> Data is undefined</div>
             }
 
             {/* <TransactionsSubCard text={"Withdrew INR"} amount="Rs 500" date="15th July, 2025"></TransactionsSubCard>
             <TransactionsSubCard text={"Withdrew INR"} amount="Rs 500" date="15th July, 2025"></TransactionsSubCard>
             <TransactionsSubCard text={"Withdrew INR"} amount="Rs 500" date="15th July, 2025"></TransactionsSubCard> */}
-        </div>
+        </div >
     )
 }

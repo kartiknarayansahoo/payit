@@ -43,7 +43,7 @@ export async function createOnRampTransactions(amount: string, bankName: string,
         }
 
         // add transaction and update balance
-        const res = await prisma.$transaction([
+        await prisma.$transaction([
             prisma.onRampTransaction.create({
                 data: {
                     status: "Success",
