@@ -39,8 +39,4 @@ jobs:
           sudo docker pull kartikna/payit:latest
           sudo docker stop payit-app || true
           sudo docker rm payit-app || true
-          sudo docker run -d --name payit-app -e DATABASE_URL=${{ secrets.DATABASE_URL }}
-          -e JWT_SECRET=${{ secrets.JWT_SECRET }}
-          -e NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}
-          -e NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }}
-          -p 3006:3000 kartikna/payit:latest
+          sudo docker run -d --name payit-app -e DATABASE_URL=${{ secrets.DATABASE_URL }} -e JWT_SECRET=${{ secrets.JWT_SECRET }} -e NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }} -e NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }} -p 3006:3000 kartikna/payit:latest
